@@ -67,7 +67,7 @@ per installare quella firmata va prima **disinstallata**.
 
 ## 4. Uso
 
-- L'app mostra la pagina di AAC sotto una barra con i pulsanti **Indirizzo** ed **Esci**.
+- L'app mostra la pagina di AAC sotto una barra con i pulsanti **Cambia indirizzo** ed **Esci**.
 - Una notifica fissa indica lo stato: *Nessun passaggio in attesa*, *In attesa: UNO → DUE*,
   *AAC non raggiungibile*, *Codice errato*.
 - Quando compare un passaggio nuovo: **doppio beep + vibrazione**, una volta per passaggio.
@@ -78,7 +78,7 @@ per installare quella firmata va prima **disinstallata**.
 - L'indirizzo predefinito è scritto nel codice (`Prefs.DEFAULT_PAGE_URL`):
   `http://192.168.28.10:8765/?t=5f3e5f517ec55717d1eeb6f4`. Se cambia IP o token, aggiornarlo
   lì e ricompilare, oppure correggerlo dal telefono.
-- Per correggerlo dal telefono: pulsante **Indirizzo** nella barra in alto, azione
+- Per correggerlo dal telefono: pulsante **Cambia indirizzo** nella barra in alto, azione
   **Cambia indirizzo** nella notifica, oppure il pulsante omonimo che compare quando la pagina non è raggiungibile.
   **Predefinito** torna all'indirizzo scritto nel codice.
 
