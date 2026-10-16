@@ -67,18 +67,19 @@ per installare quella firmata va prima **disinstallata**.
 
 ## 4. Uso
 
-- L'app mostra la pagina di AAC a schermo intero.
+- L'app mostra la pagina di AAC sotto una barra con i pulsanti **Indirizzo** ed **Esci**.
 - Una notifica fissa indica lo stato: *Nessun passaggio in attesa*, *In attesa: UNO → DUE*,
   *AAC non raggiungibile*, *Codice errato*.
 - Quando compare un passaggio nuovo: **doppio beep + vibrazione**, una volta per passaggio.
   Il beep usa il volume della **sveglia**: suona anche con la suoneria in silenzioso.
 - **Indietro** manda l'app in secondo piano senza fermarla.
-- **Ferma** (nella notifica) spegne la sorveglianza; si riattiva riaprendo l'app.
+- **Esci** (barra in alto) o **Ferma** (nella notifica, espandendola) spengono la sorveglianza
+  e il beep; si riattivano riaprendo l'app.
 - L'indirizzo predefinito è scritto nel codice (`Prefs.DEFAULT_PAGE_URL`):
   `http://192.168.28.10:8765/?t=5f3e5f517ec55717d1eeb6f4`. Se cambia IP o token, aggiornarlo
   lì e ricompilare, oppure correggerlo dal telefono.
-- Per correggerlo dal telefono: azione **Cambia indirizzo** nella notifica (sempre disponibile),
-  oppure il pulsante omonimo che compare quando la pagina non è raggiungibile.
+- Per correggerlo dal telefono: pulsante **Indirizzo** nella barra in alto, azione
+  **Cambia indirizzo** nella notifica, oppure il pulsante omonimo che compare quando la pagina non è raggiungibile.
   **Predefinito** torna all'indirizzo scritto nel codice.
 
 La sorveglianza tiene sveglia CPU e Wi-Fi: consuma un po' di batteria finché è attiva.

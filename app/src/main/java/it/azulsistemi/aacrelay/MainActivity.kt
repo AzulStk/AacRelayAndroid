@@ -6,17 +6,24 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
 import android.text.InputType
+import android.view.Gravity
+import android.view.View
+import android.view.WindowInsets
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
 
 /**
  * Mostra la pagina AAC a schermo intero e avvia il servizio che suona il beep.
@@ -40,7 +47,7 @@ class MainActivity : Activity() {
                 if (request.isForMainFrame) showUnreachable()
             }
         }
-        setContentView(webView)
+        setContentView(buildLayout())
 
         askNotificationPermission()
         askBatteryExemption()
@@ -58,6 +65,56 @@ class MainActivity : Activity() {
     companion object {
         /** Extra dell'intent che apre direttamente la correzione dell'indirizzo. */
         const val EXTRA_ASK_URL = "askUrl"
+
+        /** Stesso grigio dei pannelli della pagina AAC. */
+        private const val BAR_COLOR = 0xFF2B2B2B.toInt()
+    }
+
+    /** Barra con Indirizzo ed Esci sopra la pagina, il tutto fuori dalle barre di sistema. */
+    private fun buildLayout(): View {
+        val bar = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setBackgroundColor(BAR_COLOR)
+            addView(TextView(this@MainActivity).apply {
+                text = getString(R.string.app_name)
+                setTextColor(Color.WHITE)
+                textSize = 16f
+                setPadding(32, 0, 0, 0)
+            }, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+            addView(barButton(R.string.change_url) { askUrl() })
+            addView(barButton(R.string.exit) { exit() })
+        }
+
+        return LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setBackgroundColor(BAR_COLOR)
+            addView(bar, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT))
+            addView(webView, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f))
+            // Da Android 15 l'app si estende sotto barra di stato e di navigazione: il margine
+            // lo dà l'altezza delle barre, e della tastiera quando è aperta. Prima no, e il
+            // margine sarebbe doppio.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+                setOnApplyWindowInsetsListener { v, insets ->
+                    val b = insets.getInsets(WindowInsets.Type.systemBars() or WindowInsets.Type.ime())
+                    v.setPadding(b.left, b.top, b.right, b.bottom)
+                    insets
+                }
+            }
+        }
+    }
+
+    private fun barButton(textId: Int, onClick: () -> Unit): Button =
+        Button(this, null, android.R.attr.borderlessButtonStyle).apply {
+            text = getString(textId)
+            setTextColor(Color.WHITE)
+            setOnClickListener { onClick() }
+        }
+
+    /** Ferma la sorveglianza e chiude l'app: niente più beep finché non la si riapre. */
+    private fun exit() {
+        stopService(Intent(this, RelayWatchService::class.java))
+        finishAndRemoveTask()
     }
 
     private fun open(url: String) {
