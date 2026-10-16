@@ -45,8 +45,19 @@ class MainActivity : Activity() {
         askNotificationPermission()
         askBatteryExemption()
 
-        val url = Prefs.pageUrl(this)
-        if (url.isEmpty()) askUrl() else open(url)
+        open(Prefs.pageUrl(this))
+        if (intent.getBooleanExtra(EXTRA_ASK_URL, false)) askUrl()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        // Azione "Indirizzo" della notifica con l'app già aperta
+        if (intent.getBooleanExtra(EXTRA_ASK_URL, false)) askUrl()
+    }
+
+    companion object {
+        /** Extra dell'intent che apre direttamente la correzione dell'indirizzo. */
+        const val EXTRA_ASK_URL = "askUrl"
     }
 
     private fun open(url: String) {
@@ -60,21 +71,24 @@ class MainActivity : Activity() {
     private fun askUrl() {
         val input = EditText(this).apply {
             inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_URI
-            setText(Prefs.pageUrl(this@MainActivity).ifEmpty { "http://" })
+            setText(Prefs.pageUrl(this@MainActivity))
         }
         AlertDialog.Builder(this)
             .setTitle(R.string.url_title)
             .setMessage(R.string.url_message)
             .setView(input)
-            .setCancelable(false)
             .setPositiveButton(android.R.string.ok) { _, _ ->
                 val url = input.text.toString().trim()
                 if (Prefs.statusUrl(url) == null) { askUrl(); return@setPositiveButton }
+                // Il servizio si accorge del cambio al prossimo avvio in open()
                 Prefs.setPageUrl(this, url)
-                // Il servizio rilegge l'indirizzo al riavvio
-                stopService(Intent(this, RelayWatchService::class.java))
                 open(url)
             }
+            .setNeutralButton(R.string.default_url) { _, _ ->
+                Prefs.setPageUrl(this, "")
+                open(Prefs.pageUrl(this))
+            }
+            .setNegativeButton(android.R.string.cancel, null)
             .show()
     }
 

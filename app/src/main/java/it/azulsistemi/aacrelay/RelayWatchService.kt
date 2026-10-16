@@ -154,6 +154,11 @@ class RelayWatchService : Service() {
         val openApp = PendingIntent.getActivity(
             this, 0, Intent(this, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE
         )
+        val askUrl = PendingIntent.getActivity(
+            this, 2,
+            Intent(this, MainActivity::class.java).putExtra(MainActivity.EXTRA_ASK_URL, true),
+            PendingIntent.FLAG_IMMUTABLE
+        )
         val stop = PendingIntent.getService(
             this, 1, Intent(this, RelayWatchService::class.java).setAction(ACTION_STOP), PendingIntent.FLAG_IMMUTABLE
         )
@@ -163,6 +168,7 @@ class RelayWatchService : Service() {
             .setContentText(text)
             .setContentIntent(openApp)
             .setOngoing(true)
+            .addAction(Notification.Action.Builder(null, getString(R.string.change_url), askUrl).build())
             .addAction(Notification.Action.Builder(null, getString(R.string.stop), stop).build())
             .build()
     }

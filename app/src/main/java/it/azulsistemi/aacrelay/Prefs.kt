@@ -3,13 +3,17 @@ package it.azulsistemi.aacrelay
 import android.content.Context
 import android.net.Uri
 
-/** Indirizzo della pagina AAC, salvato sul telefono: il token non finisce nel sorgente. */
+/** Indirizzo della pagina AAC: quello predefinito, oppure quello corretto a mano sul telefono. */
 object Prefs {
     private const val FILE = "aacrelay"
     private const val KEY_PAGE_URL = "pageUrl"
 
+    /** Indirizzo usato finché non se ne salva un altro. */
+    const val DEFAULT_PAGE_URL = "http://192.168.28.10:8765/?t=5f3e5f517ec55717d1eeb6f4"
+
     fun pageUrl(context: Context): String =
-        context.getSharedPreferences(FILE, Context.MODE_PRIVATE).getString(KEY_PAGE_URL, "") ?: ""
+        context.getSharedPreferences(FILE, Context.MODE_PRIVATE).getString(KEY_PAGE_URL, null)
+            ?.takeIf { it.isNotBlank() } ?: DEFAULT_PAGE_URL
 
     fun setPageUrl(context: Context, url: String) {
         context.getSharedPreferences(FILE, Context.MODE_PRIVATE).edit()

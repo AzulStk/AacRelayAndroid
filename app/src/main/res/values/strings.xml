@@ -6,6 +6,7 @@
     <string name="unreachable_title">AAC non raggiungibile</string>
     <string name="retry">Riprova</string>
     <string name="change_url">Cambia indirizzo</string>
+    <string name="default_url">Predefinito</string>
     <string name="stop">Ferma</string>
     <string name="channel_name">Sorveglianza AAC</string>
     <string name="status_starting">Avvio…</string>

@@ -15,9 +15,8 @@ App minimale che fa due cose sole:
   avvio chiede l'esenzione dal risparmio energetico (va concessa). Costa un po' di batteria:
   il pulsante **Ferma** nella notifica spegne tutto.
 - Il beep usa il volume **sveglia** (`STREAM_ALARM`): suona anche con la suoneria in silenzioso.
-- L'indirizzo con il token si inserisce al primo avvio e resta sul telefono, mai nel sorgente.
-  Per cambiarlo: compare "Cambia indirizzo" quando la pagina non è raggiungibile, oppure
-  si cancellano i dati dell'app.
+- L'indirizzo con il token è predefinito nel codice (`Prefs.DEFAULT_PAGE_URL`). Si corregge
+  dal telefono con l'azione "Cambia indirizzo" della notifica; "Predefinito" lo ripristina.
 
 ## Build
 
@@ -42,8 +41,8 @@ Rilascio: `git tag v1.0.0 && git push --tags`.
 ## Installazione
 
 Scaricare `AacRelay.apk` dalla Release sul telefono, aprirlo, consentire "installa app
-sconosciute" al browser/file manager. Al primo avvio: incollare l'indirizzo, consentire le
-notifiche e l'esenzione batteria.
+sconosciute" al browser/file manager. Al primo avvio: consentire le notifiche e l'esenzione
+batteria.
 
 Su alcuni telefoni (Xiaomi, Huawei, Samsung con ottimizzazioni aggressive) serve anche
 consentire l'avvio in background / togliere l'app dalle "app in sospensione".

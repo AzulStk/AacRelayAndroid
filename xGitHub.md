@@ -55,8 +55,6 @@ Il numero di versione interno (`versionCode`) cresce da solo a ogni run.
 1. Scaricare `AacRelay.apk` dal telefono (Release) e aprirlo.
 2. Consentire **"Installa app sconosciute"** al browser o al file manager quando richiesto.
 3. Al primo avvio:
-   - incollare l'indirizzo completo della pagina AAC, codice compreso:
-     `http://192.168.28.10:8765/?t=…`
    - **consentire le notifiche**;
    - **consentire l'esclusione dal risparmio energetico** (indispensabile per il beep in standby).
 4. Su Xiaomi, Huawei e alcuni Samsung: nelle impostazioni dell'app consentire l'avvio /
@@ -76,7 +74,11 @@ per installare quella firmata va prima **disinstallata**.
   Il beep usa il volume della **sveglia**: suona anche con la suoneria in silenzioso.
 - **Indietro** manda l'app in secondo piano senza fermarla.
 - **Ferma** (nella notifica) spegne la sorveglianza; si riattiva riaprendo l'app.
-- Per cambiare indirizzo: quando la pagina non è raggiungibile compare *Cambia indirizzo*;
-  in alternativa cancellare i dati dell'app.
+- L'indirizzo predefinito è scritto nel codice (`Prefs.DEFAULT_PAGE_URL`):
+  `http://192.168.28.10:8765/?t=5f3e5f517ec55717d1eeb6f4`. Se cambia IP o token, aggiornarlo
+  lì e ricompilare, oppure correggerlo dal telefono.
+- Per correggerlo dal telefono: azione **Cambia indirizzo** nella notifica (sempre disponibile),
+  oppure il pulsante omonimo che compare quando la pagina non è raggiungibile.
+  **Predefinito** torna all'indirizzo scritto nel codice.
 
 La sorveglianza tiene sveglia CPU e Wi-Fi: consuma un po' di batteria finché è attiva.
