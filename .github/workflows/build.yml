@@ -1,0 +1,57 @@
+name: Build APK
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      # Gradle installato dall'azione: niente wrapper binario nel repository
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.11.1'
+
+      - name: Keystore dai secret
+        env:
+          KEYSTORE_BASE64: ${{ secrets.AAC_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/aacrelay.p12"
+            echo "AAC_KEYSTORE_FILE=$RUNNER_TEMP/aacrelay.p12" >> "$GITHUB_ENV"
+          else
+            echo "::warning::Secret AAC_KEYSTORE_BASE64 assente: APK firmato con chiave di debug"
+          fi
+
+      - name: Compila
+        env:
+          AAC_KEYSTORE_PASSWORD: ${{ secrets.AAC_KEYSTORE_PASSWORD }}
+          AAC_KEY_ALIAS: ${{ secrets.AAC_KEY_ALIAS }}
+          AAC_KEY_PASSWORD: ${{ secrets.AAC_KEY_PASSWORD }}
+        run: |
+          gradle :app:assembleRelease --no-daemon
+          mv app/build/outputs/apk/release/app-release.apk AacRelay.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AacRelay-apk
+          path: AacRelay.apk
+
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: AacRelay.apk

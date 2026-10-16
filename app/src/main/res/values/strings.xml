@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AAC Relay</string>
+    <string name="url_title">Indirizzo della pagina AAC</string>
+    <string name="url_message">Incolla l\'indirizzo completo, codice compreso: http://IP:8765/?t=…</string>
+    <string name="unreachable_title">AAC non raggiungibile</string>
+    <string name="retry">Riprova</string>
+    <string name="change_url">Cambia indirizzo</string>
+    <string name="stop">Ferma</string>
+    <string name="channel_name">Sorveglianza AAC</string>
+    <string name="status_starting">Avvio…</string>
+    <string name="status_idle">Nessun passaggio in attesa</string>
+    <string name="status_waiting">In attesa: %1$s → %2$s</string>
+    <string name="status_bad_token">Codice errato</string>
+    <string name="status_unreachable">AAC non raggiungibile</string>
+    <string name="status_http_error">Errore HTTP %1$d</string>
+</resources>
